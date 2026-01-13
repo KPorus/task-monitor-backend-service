@@ -1,0 +1,31 @@
+import { Model, Schema, model } from "mongoose";
+import { AuthType } from "../types/auth.types";
+
+export interface AuthModelType extends Model<AuthType> {
+  findByEmail(email: string): Promise<AuthType | null>;
+  findUser(email: string): Promise<AuthType | null>;
+  createUser(data: Partial<AuthType>): Promise<AuthType>;
+}
+
+const userSchema = new Schema<AuthType, AuthModelType>(
+  {
+    name: String,
+    email: { type: String, unique: true, required: true },
+    password: { type: String, required: true },
+  },
+  { timestamps: true },
+);
+
+// Wrap logic with error handling using mongooseError
+userSchema.statics.findByEmail = async function (email: string) {
+  return await this.findOne({ email });
+};
+userSchema.statics.findUser = async function (email: string) {
+  return await this.findOne({ email }).select("-password");
+};
+
+userSchema.statics.createUser = async function (data: Partial<AuthType>) {
+  return await this.create(data);
+};
+
+export const User = model<AuthType, AuthModelType>("User", userSchema);
