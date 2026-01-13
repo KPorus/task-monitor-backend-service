@@ -13,7 +13,7 @@ const createTask = async (req: AuthRequest, res: Response) => {
     priority,
     assignee,
     team,
-    creator: req.user!._id,
+    creator: req.user!.id,
   });
   sendResponse(
     res,

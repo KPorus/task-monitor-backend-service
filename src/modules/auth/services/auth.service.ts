@@ -30,7 +30,7 @@ const register = async (data: TRegisterInput) => {
  * Login service =====================================
  */
 
-const studentLogin = async (data: TLoginInput) => {
+const login = async (data: TLoginInput) => {
   const existing = await User.findByEmail(data.email);
   if (!existing) {
     throw new AppError(HTTP_STATUS_CODES.UNAUTHORIZED, "Invalid email");
@@ -98,7 +98,7 @@ const refreshTokens = async (refreshToken: string) => {
 };
 
 export const authService = {
-  studentLogin,
+  login,
   register,
   refreshTokens,
 };

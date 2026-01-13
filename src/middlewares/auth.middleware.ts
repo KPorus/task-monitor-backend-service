@@ -24,7 +24,7 @@ export const authenticateJWT = (
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
-
+console.log("team",decoded);
     req.user = decoded as AuthUser;
 
     next();
@@ -47,7 +47,7 @@ export const requireRole =
       );
     }
 
-    if (!req.user?._id) {
+    if (!req.user?.id) {
       return next(
         new AppError(HTTP_STATUS_CODES.UNAUTHORIZED, "User not found in token")
       );
@@ -55,9 +55,9 @@ export const requireRole =
 
     const isOwner =
       team.owner instanceof Types.ObjectId
-        ? team.owner.equals(req.user._id)
+        ? team.owner.equals(req.user.id)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        : (team.owner as any).toString() === String(req.user._id);
+        : (team.owner as any).toString() === String(req.user.id);
 
     if (!isOwner) {
       return next(

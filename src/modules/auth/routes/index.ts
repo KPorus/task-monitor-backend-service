@@ -12,7 +12,7 @@ router.post(
 );
 
 router.post(
-  "/student/register",
+  "/register",
   validate(authValidator.registerSchema),
   asyncHandler(authController.signUp),
 );

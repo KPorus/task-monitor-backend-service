@@ -28,6 +28,7 @@ const TeamSchema = new Schema<TeamDocument, TeamModelType>(
     members: [
       {
         user: { type: Schema.Types.ObjectId, ref: "User" },
+        _id: false,
       },
     ],
   },
@@ -55,6 +56,7 @@ TeamSchema.statics.findOwnerTeams = async function (
 };
 
 TeamSchema.statics.createTeam = async function (data: Partial<TeamDocument>) {
+  console.log("in business",data);
   return await this.create(data);
 };
 

@@ -6,10 +6,10 @@ import express from "express";
 const router = express.Router();
 
 // Create team
-router.post("/", asyncHandler(teamController.createTeam));
+router.post("/create", asyncHandler(teamController.createTeam));
 
 // List current user's teams
-router.get("/", asyncHandler(teamController.getUserTeams));
+router.get("/list", asyncHandler(teamController.getUserTeams));
 
 // Add member
 router.put(

@@ -5,9 +5,13 @@ import { Types } from "mongoose";
 
 const createTeam = async (data: {
   name: string;
-  ownerId: Types.ObjectId | string;
+  owner: Types.ObjectId | string;
 }) => {
-  const team = await Team.createTeam(data);
+  console.log(data.owner);
+  const team = await Team.createTeam({
+    name: data.name,
+    owner: typeof data.owner === "string" ? new Types.ObjectId(data.owner) : data.owner,
+  });
   return {
     message: "Team created successfully",
     team,

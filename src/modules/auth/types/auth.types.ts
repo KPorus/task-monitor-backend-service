@@ -2,7 +2,7 @@ import { Document, Types } from "mongoose";
 import { Request } from "express";
 
 export interface AuthUser {
-  _id: Types.ObjectId;
+  id: Types.ObjectId;
   email: string;
 
 }

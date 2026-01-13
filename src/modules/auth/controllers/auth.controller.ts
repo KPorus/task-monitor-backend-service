@@ -20,7 +20,7 @@ const signUp = async (req: Request, res: Response) => {
 
 const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  const { accessToken, refreshToken, user } = await authService.studentLogin({
+  const { accessToken, refreshToken, user } = await authService.login({
     email,
     password,
   });

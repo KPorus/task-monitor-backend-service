@@ -6,9 +6,10 @@ import { Request, Response } from "express";
 
 const createTeam = async (req: AuthRequest, res: Response) => {
   const { name } = req.body;
+  console.log(req.user!.id);
   const result = await teamService.createTeam({
     name,
-    ownerId: req.user!._id,
+    owner: req.user!.id,
   });
   sendResponse(
     res,
@@ -19,7 +20,8 @@ const createTeam = async (req: AuthRequest, res: Response) => {
 };
 
 const getUserTeams = async (req: AuthRequest, res: Response) => {
-  const result = await teamService.getUserTeams(req.user!._id);
+  console.log(req.user);
+  const result = await teamService.getUserTeams(req.user!.id);
   sendResponse(
     res,
     result,
