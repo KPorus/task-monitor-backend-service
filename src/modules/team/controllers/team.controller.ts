@@ -20,7 +20,7 @@ const createTeam = async (req: AuthRequest, res: Response) => {
 };
 
 const getUserTeams = async (req: AuthRequest, res: Response) => {
-  console.log(req.user);
+  // console.log(req.user);
   const result = await teamService.getUserTeams(req.user!.id);
   sendResponse(
     res,
@@ -44,6 +44,7 @@ const addMember = async (req: AuthRequest, res: Response) => {
 
 const removeMember = async (req: AuthRequest, res: Response) => {
   const { teamId, memberId } = req.body;
+  // console.log("remove api: ", teamId,memberId);
   const result = await teamService.removeMember(teamId, memberId);
   sendResponse(
     res,

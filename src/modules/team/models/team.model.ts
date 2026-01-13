@@ -43,6 +43,12 @@ TeamSchema.statics.findByTeamId = async function (Id: Types.ObjectId | string) {
 TeamSchema.statics.findMemberTeams = async function (
   userId: Types.ObjectId | string,
 ) {
+  // console.log("get user team:", userId);
+  // const data = await this.find({ "members.user": userId }).populate(
+  //   "members.user",
+  //   "name email",
+  // );
+  // console.log(data);
   return await this.find({ "members.user": userId }).populate(
     "members.user",
     "name email",
@@ -56,8 +62,13 @@ TeamSchema.statics.findOwnerTeams = async function (
 };
 
 TeamSchema.statics.createTeam = async function (data: Partial<TeamDocument>) {
-  console.log("in business",data);
-  return await this.create(data);
+  const owner = data.owner;
+
+  return this.create({
+    name: data.name,
+    owner,
+    members: owner ? [{ user: owner }] : [],
+  });
 };
 
 TeamSchema.statics.addmember = async function (
