@@ -1,18 +1,12 @@
-## Project description
-
-The Task Monitor Backend Service is a **RESTful** API for creating, updating, and monitoring tasks, designed to power a task or productivity application backend, such as Jira.
-It is structured as a modern TypeScript/Node.js service with environment-based configuration, testing, linting, and deployment support already wired in.
-
 # Task Monitor Backend Service
-
-Task Monitor Backend Service is a RESTful API that provides endpoints for creating, updating, and monitoring tasks for a task management or productivity application. It is built with TypeScript and Node.js and is designed to be easily deployable ( Render) and simple to extend with new features
+## Project description
+The Task Monitor Backend Service is a **RESTful** API for creating, updating, and monitoring tasks, designed to power a task or productivity application backend, such as Jira. It is built with TypeScript and Node.js and is designed to be easily deployable ( Render) and simple to extend with new features. It is structured as a modern TypeScript/Node.js service with environment-based configuration, linting, and deployment support already wired in.
 
 ## Objectives
 
 - Provide a clean, typed backend API for managing and monitoring tasks
-- Offer a structure that is easy to extend with new modules (auth, projects, teams, etc.)
+- Offer a structure that is easy to extend with new modules (auth, task, teams)
 - Support reliable local development with environment-based configuration and automated testing
-- Be ready for cloud deployment using the included `vercel.json` configuration
 
 ## Features
 
