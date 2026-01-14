@@ -1,4 +1,5 @@
 import { HTTP_STATUS_CODES } from "@/utils/http-status-codes";
+import { Team } from "@/modules/team/models/team.model";
 import { User } from "@/modules/auth/models/auth.model";
 import { AppError } from "@/types/error.type";
 import { Task } from "../models/task.model";
@@ -13,7 +14,10 @@ const createTask = async (data: Partial<ITask>) => {
       throw new AppError(HTTP_STATUS_CODES.NOT_FOUND, "No User found for task");
     }
   }
-
+  const team = await Team.findById(data.team);
+  if (!team) {
+    throw new AppError(HTTP_STATUS_CODES.NOT_FOUND, "team not found");
+  }
   const task = await Task.createTask(data);
 
   if (task.team) {
@@ -78,7 +82,11 @@ const updateTask = async (
   taskId: Types.ObjectId | string,
   updateData: Partial<ITask>,
 ) => {
-  const updated_task = await Task.updateTask(taskId, updateData);
+  console.log(updateData);
+  const updated_task = await Task.updateTask(
+    new Types.ObjectId(taskId),
+    updateData,
+  );
   if (updated_task?.team) {
     io.to(String(updated_task.team)).emit("taskUpdate", updated_task);
   }

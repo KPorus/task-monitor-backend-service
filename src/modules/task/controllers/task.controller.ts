@@ -52,7 +52,7 @@ const assignTask = async (req: AuthRequest, res: Response) => {
 
 const deleteTask = async (req: Request, res: Response) => {
   const { id, teamId } = req.body;
-  // console.log(req.body);
+  // console.log(id, teamId);
   const result = await taskService.deleteTask(id, teamId);
   if (!result) {
     sendResponse(
@@ -66,8 +66,9 @@ const deleteTask = async (req: Request, res: Response) => {
 };
 
 const updateTask = async (req: Request, res: Response) => {
-  const { taskId, updateData } = req.body;
-  const result = await taskService.updateTask(taskId, updateData);
+  const { taskId } = req.params as { taskId: string };
+  // console.log(req.body);
+  const result = await taskService.updateTask(taskId, req.body);
   sendResponse(res, result, HTTP_STATUS_CODES.OK, "Task Updated Successfully");
 };
 

@@ -1,3 +1,4 @@
+import { Team } from "@/modules/team/models/team.model";
 import { Model, model, Schema, Types } from "mongoose";
 import { TaskDocument } from "../types/task.types";
 
@@ -82,6 +83,10 @@ TaskSchema.statics.assignTask = async function (
   userId: Types.ObjectId | string,
   taskId: Types.ObjectId | string,
 ) {
+  const teamcheck = await Team.findMemberTeams(userId);
+  if (!teamcheck || teamcheck.length === 0) {
+    return null;
+  }
   return await this.findByIdAndUpdate(
     { _id: taskId },
     { assignee: userId },
@@ -108,14 +113,19 @@ TaskSchema.statics.deleteTask = async function (
   id: Types.ObjectId | string,
   teamId: Types.ObjectId | string,
 ) {
+  // console.log(id,teamId);
   const task = await this.findById(id);
-  if (task?.team == teamId) return await this.findByIdAndDelete(id);
+  // console.log(task);
+  // console.log(task?.team.equals(teamId));
+  if (task?.team.equals(teamId)) return await this.deleteOne({ _id: id });
 };
 
 TaskSchema.statics.updateTask = async function (
   taskId: Types.ObjectId | string,
   updateData: Partial<TaskDocument>,
 ) {
-  return await this.findByIdAndUpdate(taskId, updateData, { new: true });
+  return await this.findByIdAndUpdate({ _id: taskId }, updateData, {
+    new: true,
+  });
 };
 export const Task = model<TaskDocument, TaskModelType>("Task", TaskSchema);

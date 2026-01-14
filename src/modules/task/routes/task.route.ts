@@ -25,7 +25,7 @@ router.delete(
 );
 
 router.put(
-  "/update-task/:teamId",
+  "/update-task/:taskId",
   validate(taskValidator.taskSchema),
   asyncHandler(taskController.updateTask),
 );

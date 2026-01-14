@@ -1,11 +1,10 @@
+import { Task } from "@/modules/task/models/task.model";
 import { Model, model, Schema, Types } from "mongoose";
 import { TeamDocument } from "../types/team.types";
 
 export interface TeamModelType extends Model<TeamDocument> {
   findByTeamId(Id: Types.ObjectId | string): Promise<TeamDocument | null>;
-  findMemberTeams(
-    userId: Types.ObjectId | string,
-  ): Promise<TeamDocument | null>;
+  findMemberTeams(userId: Types.ObjectId | string): Promise<TeamDocument[]>;
   findOwnerTeams(
     ownerId: Types.ObjectId | string,
   ): Promise<TeamDocument | null>;
@@ -95,6 +94,7 @@ TeamSchema.statics.removeMember = async function (
 
 TeamSchema.statics.deleteTeam = async function (id: Types.ObjectId | string) {
   const team = await this.findById({ _id: id });
+  await Task.deleteMany({ team: id });
   if (team) return await this.deleteOne({ _id: id });
 };
 export const Team = model<TeamDocument, TeamModelType>("Team", TeamSchema);
