@@ -40,8 +40,8 @@ const getTaskList = async (req: Request, res: Response) => {
   );
 };
 const assignTask = async (req: AuthRequest, res: Response) => {
-  const { id } = req.body;
-  const result = await taskService.assignTask(id);
+  const { id, taskId } = req.body;
+  const result = await taskService.assignTask(id, taskId);
   sendResponse(
     res,
     result,

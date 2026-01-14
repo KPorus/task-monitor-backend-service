@@ -37,10 +37,19 @@ const getTaskList = async (teamId: Types.ObjectId | string) => {
   };
 };
 
-const assignTask = async (userId: Types.ObjectId | string) => {
-  const tasks = await Task.assignTask(userId);
+const assignTask = async (
+  userId: Types.ObjectId | string,
+  taskId: Types.ObjectId | string,
+) => {
+  const tasks = await Task.assignTask(
+    new Types.ObjectId(userId),
+    new Types.ObjectId(taskId),
+  );
   if (!tasks) {
     throw new AppError(HTTP_STATUS_CODES.NOT_FOUND, "No tasks found for user");
+  }
+  if (tasks?.team) {
+    io.to(String(tasks.team)).emit("taskAssign", tasks);
   }
   return {
     message: "User tasks fetched successfully",

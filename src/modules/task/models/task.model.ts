@@ -3,7 +3,10 @@ import { TaskDocument } from "../types/task.types";
 
 export interface TaskModelType extends Model<TaskDocument> {
   findTaskList(teamId: Types.ObjectId | string): Promise<TaskDocument[]>;
-  assignTask(userId: Types.ObjectId | string): Promise<TaskDocument[]>;
+  assignTask(
+    userId: Types.ObjectId | string,
+    teamId: Types.ObjectId | string,
+  ): Promise<TaskDocument>;
   createTask(data: Partial<TaskDocument>): Promise<TaskDocument>;
   deleteTask(id: Types.ObjectId | string): Promise<TaskDocument | null>;
   updateTask(
@@ -74,8 +77,13 @@ TaskSchema.statics.findTaskList = async function (
 
 TaskSchema.statics.assignTask = async function (
   userId: Types.ObjectId | string,
+  taskId: Types.ObjectId | string,
 ) {
-  return await this.find({ assignee: userId });
+  return await this.findByIdAndUpdate(
+    { _id: taskId },
+    { assignee: userId },
+    { new: true },
+  );
 };
 
 TaskSchema.statics.createTask = async function (data: Partial<TaskDocument>) {

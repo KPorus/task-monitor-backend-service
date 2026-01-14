@@ -2,6 +2,7 @@ import { HTTP_STATUS_CODES } from "@/utils/http-status-codes";
 import { AppError } from "@/types/error.type";
 import { Team } from "../models/team.model";
 import { Types } from "mongoose";
+import { io } from "@/server";
 
 const createTeam = async (data: {
   name: string;
@@ -37,6 +38,9 @@ const addMember = async (
   member: { user: Types.ObjectId | string },
 ) => {
   const team = await Team.addmember(teamId, member);
+  if (team?._id) {
+    io.to(String(team._id)).emit("teamMemberAdd", team);
+  }
   return {
     message: "Member added successfully",
     team,
@@ -48,6 +52,9 @@ const removeMember = async (
   memberId: Types.ObjectId | string,
 ) => {
   const team = await Team.removeMember(teamId, memberId);
+  if (team?._id) {
+    io.to(String(team._id)).emit("teamMemberRemove", team);
+  }
   return {
     message: "Member removed successfully",
     team,

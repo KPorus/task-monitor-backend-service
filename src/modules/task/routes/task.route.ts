@@ -16,7 +16,7 @@ router.post(
   asyncHandler(taskController.createTask),
 );
 
-router.get("/assign-task", asyncHandler(taskController.assignTask));
+router.put("/assign-task", asyncHandler(taskController.assignTask));
 
 router.delete(
   "/delete-task",
