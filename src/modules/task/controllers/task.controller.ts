@@ -51,8 +51,17 @@ const assignTask = async (req: AuthRequest, res: Response) => {
 };
 
 const deleteTask = async (req: Request, res: Response) => {
-  const { id } = req.body;
-  const result = await taskService.deleteTask(id);
+  const { id, teamId } = req.body;
+  // console.log(req.body);
+  const result = await taskService.deleteTask(id, teamId);
+  if (!result) {
+    sendResponse(
+      res,
+      result,
+      HTTP_STATUS_CODES.BAD_REQUEST,
+      "Task Delete Failed",
+    );
+  }
   sendResponse(res, result, HTTP_STATUS_CODES.OK, "Task Deleted Successfully");
 };
 

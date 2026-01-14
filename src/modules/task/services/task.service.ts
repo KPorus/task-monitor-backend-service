@@ -57,8 +57,14 @@ const assignTask = async (
   };
 };
 
-const deleteTask = async (id: Types.ObjectId | string) => {
-  const deleted_task = await Task.deleteTask(id);
+const deleteTask = async (
+  id: Types.ObjectId | string,
+  teamId: Types.ObjectId | string,
+) => {
+  const deleted_task = await Task.deleteTask(
+    new Types.ObjectId(id),
+    new Types.ObjectId(teamId),
+  );
   if (deleted_task?.team) {
     io.to(String(deleted_task.team)).emit("taskDelete", deleted_task);
   }

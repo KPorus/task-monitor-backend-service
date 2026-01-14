@@ -16,3 +16,4 @@ uploads
 # Docker
 postgres_data
 scripts
+.vercel

@@ -5,10 +5,13 @@ export interface TaskModelType extends Model<TaskDocument> {
   findTaskList(teamId: Types.ObjectId | string): Promise<TaskDocument[]>;
   assignTask(
     userId: Types.ObjectId | string,
-    teamId: Types.ObjectId | string,
+    taskId: Types.ObjectId | string,
   ): Promise<TaskDocument>;
   createTask(data: Partial<TaskDocument>): Promise<TaskDocument>;
-  deleteTask(id: Types.ObjectId | string): Promise<TaskDocument | null>;
+  deleteTask(
+    id: Types.ObjectId | string,
+    teamId: Types.ObjectId | string,
+  ): Promise<TaskDocument | null>;
   updateTask(
     taskId: Types.ObjectId | string,
     updateData: Partial<TaskDocument>,
@@ -101,8 +104,12 @@ TaskSchema.statics.removeMember = async function (
   );
 };
 
-TaskSchema.statics.deleteTask = async function (id: Types.ObjectId | string) {
-  return await this.findByIdAndDelete(id);
+TaskSchema.statics.deleteTask = async function (
+  id: Types.ObjectId | string,
+  teamId: Types.ObjectId | string,
+) {
+  const task = await this.findById(id);
+  if (task?.team == teamId) return await this.findByIdAndDelete(id);
 };
 
 TaskSchema.statics.updateTask = async function (
