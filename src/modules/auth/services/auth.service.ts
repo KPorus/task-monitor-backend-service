@@ -4,6 +4,7 @@ import { generateToken, verifyToken } from "@/utils/token.util";
 import { HTTP_STATUS_CODES } from "@utils/http-status-codes";
 import { AppError } from "@/types/error.type";
 import { User } from "../models/auth.model";
+import { Types } from "mongoose";
 
 /**
  * Register service =====================================
@@ -96,8 +97,21 @@ const refreshTokens = async (refreshToken: string) => {
   };
 };
 
+// all user
+const getAllUsers = async (userId: Types.ObjectId | string) => {
+  const users = await User.findAllUser(new Types.ObjectId(userId));
+  if (!users || users.length == 0) {
+    throw new AppError(HTTP_STATUS_CODES.NOT_FOUND, "Not Users Found");
+  }
+  return {
+    messages: "Users found",
+    users,
+  };
+};
+
 export const authService = {
   login,
   register,
   refreshTokens,
+  getAllUsers,
 };

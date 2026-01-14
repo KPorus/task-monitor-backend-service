@@ -2,6 +2,7 @@ import { clearCookieAndHeader, setCookie } from "@/utils/cookie.util";
 import { HTTP_STATUS_CODES } from "@utils/http-status-codes";
 import { sendResponse } from "@/handlers/response.handler";
 import { authService } from "../services/auth.service";
+import { AuthRequest } from "../types/auth.types";
 import { Request, Response } from "express";
 
 /**
@@ -57,9 +58,17 @@ const handleRefreshTokens = async (req: Request, res: Response) => {
   );
 };
 
+const getAllUsers = async (req: AuthRequest, res: Response) => {
+  const id = req.user?.id.toString();
+  console.log(id);
+  const users = await authService.getAllUsers(id as string);
+  sendResponse(res, users.users, HTTP_STATUS_CODES.OK, users.messages);
+};
+
 export const authController = {
   signUp,
   login,
   logout,
   handleRefreshTokens,
+  getAllUsers,
 };

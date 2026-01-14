@@ -1,7 +1,8 @@
-import { Model, Schema, model } from "mongoose";
+import { Model, Schema, Types, model } from "mongoose";
 import { AuthType } from "../types/auth.types";
 
 export interface AuthModelType extends Model<AuthType> {
+  findAllUser(currentUserId: Types.ObjectId | string): Promise<[]>;
   findByEmail(email: string): Promise<AuthType | null>;
   findUser(email: string): Promise<AuthType | null>;
   createUser(data: Partial<AuthType>): Promise<AuthType>;
@@ -22,6 +23,11 @@ userSchema.statics.findByEmail = async function (email: string) {
 };
 userSchema.statics.findUser = async function (email: string) {
   return await this.findOne({ email }).select("-password");
+};
+userSchema.statics.findAllUser = async function (
+  currentUserId: Types.ObjectId | string,
+) {
+  return this.find({ _id: { $ne: currentUserId } });
 };
 
 userSchema.statics.createUser = async function (data: Partial<AuthType>) {
