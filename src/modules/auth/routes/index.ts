@@ -18,7 +18,7 @@ router.post(
   asyncHandler(authController.signUp),
 );
 router.post("/refreshToken", asyncHandler(authController.handleRefreshTokens));
-router.post(
+router.get(
   "/get-all-users",
   authenticateJWT,
   asyncHandler(authController.getAllUsers),
