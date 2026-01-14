@@ -13,10 +13,9 @@ export const app: Application = express();
 const port = process.env.PORT ?? 5000;
 
 const httpServer = http.createServer(app);
-const allowedOrigins = [
-  process.env.CLIENT_ADMIN_URL,
-  process.env.CLIENT_ECOM_URL,
-].filter((o): o is string => !!o);
+const allowedOrigins = [process.env.CLIENT_ECOM_URL].filter(
+  (o): o is string => !!o,
+);
 
 export const io = new SocketIOServer(httpServer, {
   cors: {
