@@ -1,6 +1,40 @@
-# Task Monitor Backend Service
+# TaskFlow Backend Service
+
 ## Project description
+
 The Task Monitor Backend Service is a **RESTful** API for creating, updating, and monitoring tasks, designed to power a task or productivity application backend, such as Jira. It is built with TypeScript and Node.js and is designed to be easily deployable ( Render) and simple to extend with new features. It is structured as a modern TypeScript/Node.js service with environment-based configuration, linting, and deployment support already wired in.
+
+This project follows a **team-scoped role** model for authorization, rather than defining different global user types.
+
+- A single type of user account exists for everyone in the system (no separate “global admin” or “org user” types).
+- Any authenticated user can create a team and automatically becomes the **owner** of that team.
+- The same user can belong to multiple teams simultaneously, with a different role in each team (owner in Team A, admin in Team B, member in Team C).
+- Roles such as **owner**, **admin**, and **member** are always defined **per team**, not globally.
+
+This approach is flexible and scalable and matches how most modern collaboration tools and Jira‑style project management systems structure permissions.
+
+### Team‑scoped permissions
+
+All key operations are authorized by checking the user’s role **within the specific team**:
+
+- **Team management**
+
+  - Create team: Any authenticated user can create a team and becomes its owner.
+  - Add/remove team member: Allowed for team owners/admins.
+  - Delete team: Restricted to team owners (and optionally admins), with safeguards if active tasks exist.
+
+- **Task management**
+
+  - Create task: Team members can create tasks within teams they belong to.
+  - Update/delete task: Restricted to the task’s assignee or users with sufficient role in that team (e.g. owner/admin).
+  - Assign task: Owners/admins can assign tasks to any team member; optional rules can allow self-assignment for members.
+
+- **Listing and querying**
+  - List teams: Returns teams where the user has any role (owner/admin/member).
+  - List users: Returns users within a specific team for assignment and collaboration.
+  - List tasks: Returns tasks scoped to teams the user belongs to, with filters by status, assignee, and other fields.
+
+This model keeps the global user concept simple and concentrates authorization logic at the team level, which is easier to reason about and extend over time.
 
 ## Objectives
 
@@ -78,7 +112,6 @@ Key files and directories in the repository
    pnpm start:dev
    ```
 
-
 Architecture Diagram of Backend Service
 
 ```mermaid
@@ -127,9 +160,5 @@ erDiagram
     TEAM ||--o{ TASK : "contains"
     USER ||--o{ TASK : "creates"
     USER ||--o{ TASK : "assigned_to"
-
-```
-
-```
 
 ```
